@@ -231,25 +231,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-item v-if="modalForm.menuType != 'F'" label="菜单图标">
-              <a-popover position="bottom" width="460" trigger="click">
-                <template #content
-                  ><IconSelect ref="iconSelect" @selected="selected"
-                /></template>
-
-                <a-input-search
-                  v-model="modalForm.icon"
-                  placeholder="点击选择图标"
-                  readonly
-                >
-                  <svg-icon
-                    v-if="modalForm.icon"
-                    :icon-class="modalForm.icon"
-                    class="el-input__icon"
-                    style="height: 32px; width: 16px"
-                  />
-                  <i v-else class="el-icon-search el-input__icon" />
-                </a-input-search>
-              </a-popover>
+              <IconSelect v-model:value="modalForm.icon"></IconSelect>
             </a-form-item>
           </a-col>
         </a-row>

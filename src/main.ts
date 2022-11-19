@@ -14,10 +14,6 @@ import '@arco-design/web-vue/dist/arco.css';
 import '@/assets/style/global.less';
 import '@/api/interceptor';
 // eslint-disable-next-line import/no-unresolved
-import 'virtual:svg-icons-register';
-
-// 公共样式
-import '@/assets/icons';
 
 const app = createApp(App);
 
