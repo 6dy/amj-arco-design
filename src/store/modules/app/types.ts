@@ -1,4 +1,4 @@
-import type { RouteRecordNormalized } from 'vue-router';
+import type { RouteRecordNormalized, RouteRecordRaw } from 'vue-router';
 
 export interface AppState {
   theme: string;
@@ -14,6 +14,6 @@ export interface AppState {
   device: string;
   tabBar: boolean;
   menuFromServer: boolean;
-  serverMenu: RouteRecordNormalized[];
+  serverMenu: RouteRecordRaw[];
   [key: string]: unknown;
 }

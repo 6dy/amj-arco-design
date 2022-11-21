@@ -1,10 +1,15 @@
+/* eslint-disable consistent-return */
 import { defineStore } from 'pinia';
 import { Notification } from '@arco-design/web-vue';
 import type { NotificationReturn } from '@arco-design/web-vue/es/notification/interface';
 import type { RouteRecordNormalized } from 'vue-router';
 import defaultSettings from '@/config/settings.json';
 import { getMenuList } from '@/api/user';
+
+import { generatorRoutes, mapTwoLevelRouter } from '@/store/help';
 import router from '@/router';
+// import { WHITE_LIST, NOT_FOUND, DEFAULT_ROUTE } from '@/router/constants';
+import { defaultRoutes } from '@/router/routes/default-routes';
 import { AppState } from './types';
 
 export const DEFAULT_LAYOUT = () => import('@/layout/default-layout.vue');
@@ -116,22 +121,13 @@ const useAppStore = defineStore('app', {
           content: 'loading',
           closable: true,
         });
-        const { data } = await getMenuList();
-        console.log(121, data);
-
-        // this.serverMenu = this.transformKey(data);
-        this.serverMenu = this.filterAsyncRouter(this.transformKey(data));
-        // this.updateSettings({ serverMenu: this.serverMenu });
-        this.serverMenu.forEach((v) => {
-          router.addRoute(v);
-        });
-        console.log('router9999', router.getRoutes());
-        console.log('servermenu', this.serverMenu);
         notifyInstance = Notification.success({
           id: 'menuNotice',
           content: 'success',
           closable: true,
         });
+        const res = await getMenuList();
+        return generatorRoutes(res.data);
       } catch (error) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         notifyInstance = Notification.error({
@@ -139,7 +135,26 @@ const useAppStore = defineStore('app', {
           content: 'error',
           closable: true,
         });
+        return [];
       }
+    },
+    async initPermissionRoute() {
+      const accessRoutes = await this.fetchServerMenuConfig();
+      const mapRoutes = mapTwoLevelRouter(accessRoutes);
+      mapRoutes.forEach((it: any) => {
+        router.addRoute(it);
+      });
+      router.addRoute({
+        path: '/:pathMatch(.*)*',
+        redirect: '/404',
+        meta: {
+          hidden: true,
+        },
+      });
+      this.serverMenu = [...defaultRoutes, ...accessRoutes];
+    },
+    isEmptyPermissionRoute() {
+      return !this.serverMenu || this.serverMenu.length === 0;
     },
     clearServerMenu() {
       this.serverMenu = [];

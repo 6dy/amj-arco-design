@@ -29,7 +29,6 @@ const router = createRouter({
     },
     ...appRoutes,
     REDIRECT_MAIN,
-    NOT_FOUND_ROUTE,
   ],
   scrollBehavior() {
     return { top: 0 };

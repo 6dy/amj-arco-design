@@ -4,6 +4,7 @@ import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import SvgIcon from '@/components/SvgIcon/index.vue';
 
 import globalComponents from '@/components';
+import { setupPinia } from '@/store';
 import router from './router';
 import store from './store';
 import i18n from './locale';
@@ -19,13 +20,10 @@ const app = createApp(App);
 
 app.use(ArcoVue, {});
 app.use(ArcoVueIcon);
-app.component(
-  'SvgIcon',
-  // 如果这个组件选项是通过 `export default` 导出的，那么就会优先使用 `.default`，否则回退到使用模块的根
-  SvgIcon.default || SvgIcon
-);
+app.component('SvgIcon', SvgIcon.default || SvgIcon);
 
 app.use(router);
+setupPinia(app);
 app.use(store);
 app.use(i18n);
 app.use(globalComponents);

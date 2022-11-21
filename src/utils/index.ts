@@ -22,4 +22,8 @@ export const regexUrl = new RegExp(
   'i'
 );
 
+export function isExternal(path: string) {
+  return /^(https?:|mailto:|tel:)/.test(path);
+}
+
 export default null;
